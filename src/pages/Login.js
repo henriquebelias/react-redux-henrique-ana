@@ -1,56 +1,38 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginAction } from '../actions/';
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
+function Login() {
+  const [login, setLogin] = useState({ email: '', password: '' });
+  const [isLoged, setIsLoged] = useState(false);
+  const dispatch = useDispatch();
 
-    this.state = {
-      email: '',
-      password: '',
-      login: false,
-    }
-  }
-
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value,
-    }, () => {
-      this.handleLogin();
-    });
-  }
-
-  handleLogin = () => {
-    const { email, password } = this.state;
+  const handleLogin = () => {
+    const { email, password } = login;
     if (email.length > 0 && password.length > 0) {
-      this.setState({
-        login: true,
-      })
+      setIsLoged(true)
     } else if (email === '' || password === '') {
-      this.setState({
-        login: false,
-      })
+      setIsLoged(false)
     }
   }
 
-  render() {
-    const { email, password, login } = this.state;
-    const { loginAction } = this.props;
-    return (
-      <div>
-        <input type="text" name="email" value={ email } onChange={ this.handleChange } placeholder="Informe seu email" autoComplete="off" />
-        <input type="text" name="password" value={ password } onChange={ this.handleChange } placeholder="Informe sua senha" autoComplete="off" />
-        <Link to='/registeredclients'><button type="button" onClick={ () => loginAction(email, password, login) }>Faça o login</button></Link>
-      </div>
-    )
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    setLogin({
+      ...login,
+      [name]: value,
+    })
+    handleLogin();
   }
+
+  return (
+    <div>
+      <input type="text" name="email" value={ login.email } onChange={ handleChange } placeholder="Informe seu email" autoComplete="off" />
+      <input type="text" name="password" value={ login.password } onChange={ handleChange } placeholder="Informe sua senha" autoComplete="off" />
+      <Link to='/registeredclients'><button type="button" onClick={ () => dispatch(loginAction(login.email, login.password, isLoged)) }>Faça o login</button></Link>
+    </div>
+  )
 }
 
-const mapDispatchToProps = {
-  loginAction,
-}
-
-export default connect(null, mapDispatchToProps)(Login);
+export default Login;

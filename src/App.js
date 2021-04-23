@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router';
 import './App.css';
 import Home from './pages/Home';
@@ -6,8 +6,7 @@ import Login from './pages/Login';
 import RegisteredClients from './pages/RegisteredClients';
 import RegisterPage from './pages/RegisterPage';
 
-class App extends Component {
-  render() {
+function App() {
     return (
       <Switch>
         <Route exact path='/' component={Home} />
@@ -16,8 +15,6 @@ class App extends Component {
         <Route path='/register' component={RegisterPage} />
       </Switch>
     )
-  }
-
 }
 
 export default App;
